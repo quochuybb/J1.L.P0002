@@ -7,8 +7,7 @@ public class User {
     private String phone;
     private String email;
     private String password;
-    private String confirmPassword;
-    public User(String userName,String firstName, String lastName, String phone, String email, String password, String confirmPassword){
+    public User(String userName,String firstName, String lastName, String phone, String email, String password){
 
         this.userName = userName;
         this.firstName = firstName;
@@ -16,7 +15,6 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.password = password;
-        this.confirmPassword = confirmPassword;
     }
 
     public String getPassword() {
@@ -41,14 +39,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getFirstName() {

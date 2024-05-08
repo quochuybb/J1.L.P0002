@@ -52,6 +52,9 @@ public class Main {
                             for (Field field : fields) {
                                 field.setAccessible(true);
                                 String fieldName = field.getName();
+                                if (fieldName.equals("confirmPassword")){
+                                    continue;
+                                }
                                 Object value = field.get(user);
                                 list.add(value.toString());
                             }

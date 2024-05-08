@@ -18,7 +18,7 @@ public class UserDAO implements IUserDAO{
             try {
                 System.out.println("Input information user.");
                 if (root == 1){
-                    String username = Validator.getString("Input Username: ", "Please enter must be at least five characters and no spaces", "^[a-zA-Z][^\\s]{4,}$");
+                    String username = Validator.getString("Input Username 1: ", "Please enter must be at least five characters and no spaces", "^[a-zA-Z][^\\s]{4,}$");
                     String firstname = Validator.getString("Input Firstname User: ", "Please enter name and don't have number", "^[A-Z][a-z]*(?:\\s[A-Z][a-z]*)*$");
                     String lastname = Validator.getString("Input Lastname User: ", "Please enter name and don't have number", "^[A-Z][a-z]*(?:\\s[A-Z][a-z]*)*$");
                     String phone = Validator.getString("Input Phone User: ", "Please enter phone must contain 10 numbers", "^0\\d{9,}$");
@@ -26,7 +26,8 @@ public class UserDAO implements IUserDAO{
                     String password = Validator.getString("Input Password User: ", "Password must be at least six characters and no spaces", "^[a-zA-Z0-9][^\\s]{5,}$");
                     String confirmPassword = Validator.getString("Input Confirm Password: ", "Confirm password must equal password", password);
                     if (!checkExist(username)){
-                        User user = new User(username,firstname,lastname,phone,email,password,confirmPassword);
+                        System.out.println("User");
+                        User user = new User(username,firstname,lastname,phone,email,Validator.hashInfo(password));
                         userList.add(user);
                     }
                     else {
@@ -36,21 +37,22 @@ public class UserDAO implements IUserDAO{
                     isCountinue = Validator.getBoolen("Continue add (Y/N)");
                 }
                 else {
-                    String username = Validator.getString("Input Username: ", "Please enter must be at least five characters and no spaces", "^([a-zA-Z][^\\s]{4,})?$");
-                    String firstname = Validator.getString("Input Firstname User: ", "Please enter name and don't have number", "^([A-Z][a-z]*(?:\\s[A-Z][a-z]*))*$");
-                    String lastname = Validator.getString("Input Lastname User: ", "Please enter name and don't have number", "^([A-Z][a-z]*(?:\\s[A-Z][a-z]*))*$");
+                    String username = Validator.getString("Input Username 2: ", "Please enter must be at least five characters and no spaces", "^([a-zA-Z][^\\s]{4,})?$");
+                    String firstname = Validator.getString("Input Firstname User: ", "Please enter name and don't have number", "^([A-Z][a-z]*(?:\\s[A-Z][a-z]*)*)?$");
+                    String lastname = Validator.getString("Input Lastname User: ", "Please enter name and don't have number", "^^([A-Z][a-z]*(?:\\s[A-Z][a-z]*)*)?$");
                     String phone = Validator.getString("Input Phone User: ", "Please enter phone must contain 10 numbers", "^(0\\d{9,})*$");
                     String email = Validator.getString("Input Email User: ", "Please enter email must follow standard email format", "^([a-zA-Z0-9._%+-]+@gmail.com)*$");
                     String password = Validator.getString("Input Password User: ", "Password must be at least six characters and no spaces", "^([a-zA-Z0-9][^\\s]{5,})*$");
                     String confirmPassword = Validator.getString("Input Confirm Password: ", "Confirm password must equal password", password);
                     if (!checkExist(username)){
-                        User user = new User(username,firstname,lastname,phone,email,password,confirmPassword);
+                        User user = new User(username,firstname,lastname,phone,email,Validator.hashInfo(password));
                         userList.add(user);
                     }
                     else {
                         System.out.println("User " + username + " exist!!!");
                         continue;
                     }
+                    isCountinue = false;
                 }
 
             }
@@ -139,7 +141,6 @@ public class UserDAO implements IUserDAO{
 
     @Override
     public void updateUserInformation() {
-        List<List<String>> lines = new ArrayList<>();
         String username = Validator.getString("Input Username: ", "Please enter must be at least five characters and no spaces", "^[a-zA-Z][^\\s]{4,}$");
         deleteUserInformation(username,2);
         createUserAccount(2);
@@ -165,8 +166,6 @@ public class UserDAO implements IUserDAO{
                             value = userDeleted.get(4);
                         } else if (fieldName.equals("password")) {
                             value = userDeleted.get(5);
-                        } else if (fieldName.equals("confirmPassword")) {
-                            value = userDeleted.get(6);
                         }
                     }
                 } catch (IllegalAccessException e) {
@@ -182,12 +181,12 @@ public class UserDAO implements IUserDAO{
     public void deleteUserInformation(String username, int root) {
         boolean isContinue = true;
         while (isContinue){
-            List<List<String>> lines = new ArrayList<>();
-            if (!checkExist(username)){
-                System.out.println("User does not exist");
-                return;
-            }
             try {
+                List<List<String>> lines = new ArrayList<>();
+                if (!checkExist(username)){
+                    System.out.println("User does not exist!!!!");
+                    return;
+                }
                 FileReader fileReader = new FileReader("User.dat");
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 while ((line = bufferedReader.readLine()) != null){
